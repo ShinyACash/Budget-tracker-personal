@@ -1,6 +1,9 @@
 ﻿
 
-let money = 10000;
+if (!localStorage.getItem('money')) {
+    localStorage.setItem('money', 0);
+}
+let money = parseInt(localStorage.getItem('money')) || 0;
 
 const topicsContainer = document.getElementById('topics');
 const addTopicButton = document.getElementById('add-topic');
@@ -17,7 +20,7 @@ function createTopic(name = '', amount = 0) {
                 </div>
                 <div class="amount-control">
                     <button class="amount-btn minus">-</button>
-                    <input type="number" class="amount-input" value="${amount}" min="0" step="10">
+                    <input type="number" class="amount-input" value="${amount}" min="0" step="100">
                     <button class="amount-btn plus">+</button>
                 </div>
             `;
@@ -34,8 +37,8 @@ function createTopic(name = '', amount = 0) {
         saveTopics();
         updateExpenseTable();
     });
-    minusBtn.addEventListener('click', () => updateAmount(amountInput, -10));
-    plusBtn.addEventListener('click', () => updateAmount(amountInput, 10));
+    minusBtn.addEventListener('click', () => updateAmount(amountInput, -100));
+    plusBtn.addEventListener('click', () => updateAmount(amountInput, 100));
     amountInput.addEventListener('change', saveTopics);
 
     topicsContainer.appendChild(topic);
@@ -91,6 +94,8 @@ function calcMoney() {
             expense = expense + Number(input.value);
         }
     });
+    console.log(expense);
+    console.log(money);
     money = money - expense;
     document.getElementById("spent").innerHTML = `${expense}`;
     document.getElementById("savings").innerHTML = `${money}`;
@@ -103,6 +108,8 @@ function saveExpenses() {
         expenses[input.dataset.topic] = input.value;
     });
     localStorage.setItem('expenses', JSON.stringify(expenses));
+    calcMoney();
+
 }
 
 function loadExpenses() {
@@ -119,9 +126,38 @@ function loadExpenses() {
 addTopicButton.addEventListener('click', () => createTopic());
 expenseTableBody.addEventListener('change', saveExpenses);
 
-// Initial load
-loadTopics();
+
+const input = document.getElementById('allowanceInput');
+const allowanceDisplay = document.getElementById('allowanceDisplay');
+const container = document.querySelector('.container3');
+const setbtn = document.getElementById('add-allow');
+
+function updateAllowance() {
+    const value = parseInt(input.value) || 0;
+    const formattedValue = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+    }).format(value);
+    allowanceDisplay.innerHTML = `${formattedValue}`;
+
+    const hue = Math.max(0, Math.min(((value - 1000) / 7500) * 360, 360));
+    const saturation = Math.min(value / 100, 100);
+    allowanceDisplay.style.color = `hsl(${hue}, ${saturation}%, 50%)`;
+
+    const glowIntensity = Math.max(0, Math.min(((value - 1000) / 7500) * 30, 30));
+    container.style.boxShadow = `0 4px 6px rgba(0, 0, 0, 0.1), 0 0 ${glowIntensity}px hsl(${hue}, ${saturation}%, 50%)`;
+
+    localStorage.setItem('money', value);
+    console.log("Allowance set.");
+    console.log(localStorage.getItem('money'));
+}
+
+setbtn.addEventListener('click', () => updateAllowance());
 calcMoney();
+loadTopics();
+const myTimeout = setTimeout(calcMoney(), 500);
+
 
 
 if (money >= 5000) {

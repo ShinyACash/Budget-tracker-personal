@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,9 +21,9 @@
         <div class="head1">Hello User!</div>
         <p class="desc1" id="intromsg"></p>
         <div class="head2">Spent</div>
-        <p class="desc2" id="spent">1000</p>
+        <p class="desc2" id="spent">You arent supposed to see this</p>
         <div class="head3">Savings</div>
-        <p class="desc3" id="savings">1000</p>
+        <p class="desc3" id="savings">You arent supposed to see this</p>
     </div>
     <div class="container2">
         <h2>Expenses</h2>
@@ -38,11 +37,26 @@
             <tbody id="expense-tbody"></tbody>
         </table>
     </div>
-    <div class="container" id="setup">
-        <h1>Budget Plan</h1>
-        <div id="topics"></div>
-        <button id="add-topic">Add Section</button>
+    <div class="monthly">
+        <div class="container" id="setup">
+            <h1>Budget Plan</h1>
+            <div id="topics"></div>
+            <button id="add-topic">Add Section</button>
+        </div>
+        <div class="container3">
+            <h3>Set Your Monthly Allowance</h3>
+            <div id="allowanceDisplay">₹0</div>
+            <input type="number" id="allowanceInput" min="0" step="100" value="0">
+            <button id="add-allow">Set Allowance</button>
+        </div>
+        <div class="container4">
+            <h4>Set Your Minimum Savings</h4>
+            <div id="savingsDisplay">₹0</div>
+            <input type="number" id="savingsInput" min="0" step="100" value="0">
+            <button id="add-sav">Set Savings</button>
+        </div>
     </div>
     <script src="codeshit.js"></script>
+
 </body>
 </html>
