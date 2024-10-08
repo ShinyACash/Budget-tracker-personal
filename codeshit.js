@@ -3,6 +3,10 @@
 if (!localStorage.getItem('money')) {
     localStorage.setItem('money', 0);
 }
+
+if (!localStorage.getItem('savings')) {
+    localStorage.setItem('savings', 0);
+}
 let money = parseInt(localStorage.getItem('money')) || 0;
 
 const topicsContainer = document.getElementById('topics');
@@ -87,6 +91,7 @@ function updateExpenseTable() {
 function calcMoney() {
     let expense = 0;
     const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || {};
+    const sav = parseInt(localStorage.getItem('savings')) || 0;
     document.querySelectorAll('.expense-input').forEach(input => {
         const topicName = input.dataset.topic;
         if (savedExpenses[topicName]) {
@@ -96,9 +101,15 @@ function calcMoney() {
     });
     console.log(expense);
     console.log(money);
-    money = money - expense;
     document.getElementById("spent").innerHTML = `${expense}`;
-    document.getElementById("savings").innerHTML = `${money}`;
+    if (sav > (money - expense)) {
+        document.getElementById("savings").innerHTML = `${money - expense} <br> (Not Good)`;
+        document.getElementById("savings").style.color = "#eb5e5e";
+    }
+    else {
+        document.getElementById("savings").innerHTML = `${money - expense} <br> (Min Savings: ${sav})`;
+        document.getElementById("savings").style.color = "#4aeb61";
+    }
     console.log("Calculated");
 }
 
@@ -153,16 +164,43 @@ function updateAllowance() {
     console.log(localStorage.getItem('money'));
 }
 
+const input1 = document.getElementById('savingsInput');
+const savDisplay = document.getElementById('savingsDisplay');
+const container1 = document.querySelector('.container4');
+const setbtn1 = document.getElementById('add-sav');
+
+function updateSavings() {
+    const value = parseInt(input1.value) || 0;
+    const formattedValue = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+    }).format(value);
+    savingsDisplay.innerHTML = `${formattedValue}`;
+
+    const hue = Math.max(0, Math.min(((value - 1000) / 7500) * 360, 360));
+    const saturation = Math.min(value / 100, 100);
+    savingsDisplay.style.color = `hsl(${hue}, ${saturation}%, 50%)`;
+
+    const glowIntensity = Math.max(0, Math.min(((value - 1000) / 7500) * 30, 30));
+    container1.style.boxShadow = `0 4px 6px rgba(0, 0, 0, 0.1), 0 0 ${glowIntensity}px hsl(${hue}, ${saturation}%, 50%)`;
+
+    localStorage.setItem('savings', value);
+    console.log("Savings set.");
+    //console.log(localStorage.getItem('money'));
+}
+
 setbtn.addEventListener('click', () => updateAllowance());
+setbtn1.addEventListener('click', () => updateSavings());
 calcMoney();
 loadTopics();
 const myTimeout = setTimeout(calcMoney(), 500);
 
 
 
-if (money >= 5000) {
+if (money >= localStorage.getItem('savings')) {
     document.getElementById("intromsg").innerHTML = `You currently have ₹${money} left this month to spend. Please spend this money wisely and not fuck shit up.`;
 }
 else {
-    document.getElementById("intromsg").innerHTML = `BRO WTF ARE YOU DOING? YOU ARE GOING BEYOND PREFERED EXPENDITURE! Currently have ₹${money} so you might wanna eat mess food and buy absolutely nothing if you wanna save.`;
+    document.getElementById("intromsg").innerHTML = `BRO WTF ARE YOU DOING? YOU ARE GOING BEYOND PREFERED EXPENDITURE! You currently have ₹${money} so you might wanna eat mess food and buy absolutely nothing if you wanna save.`;
 }
