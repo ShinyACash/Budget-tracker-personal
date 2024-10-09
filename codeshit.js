@@ -199,7 +199,7 @@ const myTimeout = setTimeout(calcMoney(), 500);
 
 
 if (money >= localStorage.getItem('savings')) {
-    document.getElementById("intromsg").innerHTML = `You currently have ₹${money} left this month to spend. Please spend this money wisely and not fuck shit up.`;
+    document.getElementById("intromsg").innerHTML = `You currently have ₹${money} this month to spend. Please spend this money wisely and not mess this shit up, even though I know you're barely gonna save this month but yes.`;
 }
 else {
     document.getElementById("intromsg").innerHTML = `BRO WTF ARE YOU DOING? YOU ARE GOING BEYOND PREFERED EXPENDITURE! You currently have ₹${money} so you might wanna eat mess food and buy absolutely nothing if you wanna save.`;
