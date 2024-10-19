@@ -120,11 +120,12 @@ function saveExpenses() {
     });
     localStorage.setItem('expenses', JSON.stringify(expenses));
     calcMoney();
-
+    updateMyMsg();
 }
 
 function loadExpenses() {
     const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || {};
+    const savedTopics = JSON.parse(localStorage.getItem('topics')) || [];
     document.querySelectorAll('.expense-input').forEach(input => {
         const topicName = input.dataset.topic;
         if (savedExpenses[topicName]) {
@@ -190,17 +191,18 @@ function updateSavings() {
     //console.log(localStorage.getItem('money'));
 }
 
+function updateMyMsg() {
+    if (money >= localStorage.getItem('savings')) {
+        document.getElementById("intromsg").innerHTML = `You currently have ₹${money} this month to spend. Please spend this money wisely and not mess this shit up, even though I know you're barely gonna save this month but yes.`;
+    }
+    else {
+        document.getElementById("intromsg").innerHTML = `BRO WTF ARE YOU DOING? YOU ARE GOING BEYOND PREFERED EXPENDITURE! You currently have ₹${money} so you might wanna eat mess food and buy absolutely nothing if you wanna save.`;
+    }
+}
+
 setbtn.addEventListener('click', () => updateAllowance());
 setbtn1.addEventListener('click', () => updateSavings());
 calcMoney();
 loadTopics();
+updateMyMsg();
 const myTimeout = setTimeout(calcMoney(), 500);
-
-
-
-if (money >= localStorage.getItem('savings')) {
-    document.getElementById("intromsg").innerHTML = `You currently have ₹${money} this month to spend. Please spend this money wisely and not mess this shit up, even though I know you're barely gonna save this month but yes.`;
-}
-else {
-    document.getElementById("intromsg").innerHTML = `BRO WTF ARE YOU DOING? YOU ARE GOING BEYOND PREFERED EXPENDITURE! You currently have ₹${money} so you might wanna eat mess food and buy absolutely nothing if you wanna save.`;
-}

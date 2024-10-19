@@ -446,6 +446,18 @@ h4 {
             background-color: #3a3a3c;
         }
 
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #000;
+    color: var(--accent-color);
+    width: 105%;
+    margin-top: 5vw;
+    margin-left: -5vw;
+    margin-bottom: -5vw;
+    height: 20vw;
+}
+
 @media (max-width: 480px) {
 
     body {
@@ -509,7 +521,7 @@ h4 {
         font-family: applefont;
         font-weight: 400;
         font-style: normal;
-        font-size: 10vw;
+        font-size: 12vw;
         opacity: 0;
         animation-duration: 0.75s;
         animation-delay: 0.5s;
